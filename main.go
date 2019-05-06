@@ -7,11 +7,12 @@ import (
 	"strings"
 
 	"github.com/thimalw/exn/exchange"
+	"github.com/thimalw/number"
 )
 
 func main() {
 	// Display usage message on help flag.
-	if os.Args[1] == "-help" {
+	if len(os.Args) > 1 && os.Args[1] == "-help" {
 		showUsage()
 		os.Exit(0)
 	}
@@ -31,11 +32,23 @@ func main() {
 
 	converted, err := exchange.Convert(value, from, to)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("%.2f %s = %.2f %s\n", value, from, converted, to)
+	formattedValue, err := number.CommaFormat(fmt.Sprintf("%.2f", value))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	formattedConverted, err := number.CommaFormat(fmt.Sprintf("%.2f", converted))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("%s %s = %s %s\n", formattedValue, from, formattedConverted, to)
 }
 
 // showUsage prints the usage message.
