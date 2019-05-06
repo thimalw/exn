@@ -9,28 +9,21 @@ import (
 	"github.com/thimalw/exn/exchange"
 )
 
-// usage message to display on arg errors
-const usage = `Usage:
-exn {value} {from} {to}
-
-Example:
-exn 10 USD AUD`
-
 func main() {
-	// Display usage on help flag.
+	// Display usage message on help flag.
 	if os.Args[1] == "-help" {
-		fmt.Println(usage)
+		showUsage()
 		os.Exit(0)
 	}
 
 	if len(os.Args) != 4 {
-		fmt.Println(usage)
+		showUsage()
 		os.Exit(1)
 	}
 
 	value, err := strconv.ParseFloat(os.Args[1], 64)
 	if err != nil {
-		fmt.Println(usage)
+		showUsage()
 		os.Exit(1)
 	}
 	from := strings.ToUpper(os.Args[2])
@@ -43,4 +36,13 @@ func main() {
 	}
 
 	fmt.Printf("%.2f %s = %.2f %s\n", value, from, converted, to)
+}
+
+// showUsage prints the usage message.
+func showUsage() {
+	fmt.Println(`Usage:
+exn {value} {from} {to}
+
+Example:
+exn 10 USD AUD`)
 }
