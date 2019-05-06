@@ -17,6 +17,12 @@ Example:
 exn 10 USD AUD`
 
 func main() {
+	// Display usage on help flag.
+	if os.Args[1] == "-help" {
+		fmt.Println(usage)
+		os.Exit(0)
+	}
+
 	if len(os.Args) != 4 {
 		fmt.Println(usage)
 		os.Exit(1)
